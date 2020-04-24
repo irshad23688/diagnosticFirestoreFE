@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    <ion-title>Lab List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let list of labmaster" >
+          <ion-row>
+            <ion-col size="12">
+                <b class="labName"><i class="fa fa-flask" aria-hidden="true"></i>
+                  {{list.labname}}</b>
+            </ion-col>              
+             </ion-row>
+             <ion-row>
+               <ion-col  size="12">
+                  <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;
+                  {{list.area}}, {{list.city}} - {{list.pincode}}
+               </ion-col>
+               </ion-row>          
+             <ion-row>
+                <ion-col size="12">
+                   {{list.personname}} - <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;
+                   {{list.mobilenumber}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12">
+                   <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;{{list.email}}
+                </ion-col>
+              </ion-row><br>
+              <ion-row class="centerAlign">
+                <button class="addBtn" routerLink="/paytmtest" (click)="bookNow(list)">Book Appointment</button>
+              </ion-row>
+  </ion-card>
+
+</ion-content>

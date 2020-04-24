@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    <ion-title>New Labs
+      <button class="addBtn" type="button" (click)='addBtn()'[hidden]="showForm"><i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+      <button class="backBtn" type="button" (click)='backBtn()' [hidden]="!showForm"><i class="fa fa-arrow-left" aria-hidden="true"></i>
+      </button>
+
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="textAlign">
+  <form [formGroup]="addService" (ngSubmit)="logForm()" [hidden]="!showForm">
+    <ion-item class="formList">
+      <ion-label position="floating">Name</ion-label>
+      <ion-input type="text" formControlName="name"></ion-input>
+    </ion-item>
+    <button class="submit" type="submit" [disabled]="!addService.valid">Submit</button>
+  </form>
+    <ion-card [hidden]="showForm" *ngFor="let data of categories">
+      <div>
+          <span><b>Lab Name</b>: {{data.name}}</span><br>
+          <span><b>Created Date:</b> {{data.createdDate}}</span>
+      </div>
+   </ion-card>
+</ion-content>

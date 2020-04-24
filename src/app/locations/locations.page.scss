@@ -1,0 +1,64 @@
+.addBtn {
+    float: right;
+    background-color: #ff6c00;
+    font-size: 18px;
+    border-radius: 8px;
+    // width:25%;
+    color: white;
+    height: 30px;
+}
+
+.backBtn {
+    float: right;
+    background-color: rgba(54, 54, 235, 0.671);
+    font-size: 18px;
+    border-radius: 8px;
+    // width:25%;
+    color: white;
+    height: 30px;
+}
+
+.formList {
+    // width: 90%;
+    // border: 1px solid grey;
+    margin: 10px auto;
+    --border-color: var(--ion-color, black);
+
+}
+
+.submit {
+    background-color: #2dd36f !important;
+    border-radius: 8px;
+    padding: 10px 30px;
+    width: 80%;
+    color: white;
+}
+
+.textAlign {
+    text-align: center;
+    // background-color: #2dd36f !important;
+    --ion-background-color: #f9fafb;
+
+}
+
+ion-label {
+    color: #555555 !important;
+}
+
+.nolistMsg {
+    color: #555555 !important;
+    font-size: 12px;
+    margin: 200px auto;
+}
+
+.listCard {
+    padding: 12px;
+    background-color: #fff;
+    text-align: left;
+}
+
+.formCard {
+    margin: 60px auto;
+    width: 90%;
+    background-color: #fff;
+}

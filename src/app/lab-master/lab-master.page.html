@@ -1,0 +1,151 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+            </ion-buttons>
+      <ion-title>Lab Booking</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+  <!--Accordion wrapper-->
+  <form [formGroup]="labsignup"(ngSubmit)="onSubmit()">
+  <div class="accordion md-accordion"  id="accordionEx" role="tablist" aria-multiselectable="true">
+  
+    <!-- Accordion card -->
+    <div class="card">
+  
+      <!-- Card header -->
+      <div class="card-header" role="tab" id="headingOne1">
+        <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="true"
+          aria-controls="collapseOne1">
+          <h5 class="mb-0">
+            Lab Details<i style="float: right;" class="fa fa-angle-down" aria-hidden="true"></i>
+          </h5>
+        </a>
+      </div>
+  
+      <!-- Card body -->
+      <div id="collapseOne1" class="collapse show" role="tabpanel" aria-labelledby="headingOne1"
+        data-parent="#accordionEx">
+        <div class="card-body">
+            <!-- <form [formGroup]="labsignup" (ngSubmit)="onSubmit()"> -->
+                <ion-card class="ionCard">
+                    <ion-item class="item">
+                        <ion-label position="floating">Lab Name</ion-label>
+                        <ion-input  formControlName='labname'></ion-input>
+                    </ion-item>
+                    <ion-item class="item">
+                        <ion-label position="floating">Email</ion-label>
+                        <ion-input type="email" formControlName='email'></ion-input>
+                        </ion-item>
+                        <ion-item class="item">
+                            <ion-label position="floating">Contact Person Name</ion-label>
+                            <ion-input  formControlName='personname'></ion-input>
+                        </ion-item>
+                        <ion-item class="item">
+                              <ion-label position="floating">Mobile Number</ion-label>
+                              <ion-input type='tel' pattern="^[0-9]{10,10}$" maxlength="10" formControlName='mobilenumber'></ion-input>
+                        </ion-item>
+                </ion-card>
+  
+              <!-- </form> -->
+        </div>
+      </div>
+  
+    </div>
+    <!-- Accordion card -->
+  
+    <!-- Accordion card -->
+    <div class="card">
+  
+      <!-- Card header -->
+      <div class="card-header" role="tab" id="headingTwo2">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
+          aria-expanded="false" aria-controls="collapseTwo2">
+          <h5 class="mb-0">
+           Lab Address <i class="fa fa-angle-down" style="float:right;" aria-hidden="true"></i>
+  
+          </h5>
+        </a>
+      </div>
+  
+      <!-- Card body -->
+      <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
+        data-parent="#accordionEx">
+        <div class="card-body" style="padding: 0;">
+          <ion-card>
+            <ion-item class="item">
+                <ion-label>Address</ion-label>
+                <textarea formControlName='address'></textarea>
+            </ion-item>
+            <ion-item class="item address">
+                <ion-label position="floating">City</ion-label>
+                <ion-input formControlName='city'></ion-input>
+            </ion-item>
+            <ion-item class="item address">
+                <ion-label position="floating">State</ion-label>
+                <ion-input  formControlName='state'></ion-input>
+           </ion-item><br>
+           <!-- <ion-item class="item"> -->
+              <ion-label class="address area">Area</ion-label>
+              <ion-select formControlName="area" placeholder="Select Area" interface="popover">
+                <ion-select-option  *ngFor="let data of locationList" value="{{data.name}}" >{{data.name}}</ion-select-option>
+              </ion-select>
+            <!-- </ion-item> -->
+           <ion-item class="item address">
+              <ion-label position="floating">Pin Code</ion-label>
+              <ion-input type='tel' pattern="^[0-9]{3,45}$" maxlength="6" formControlName='pincode'></ion-input>
+            </ion-item>
+          </ion-card>
+        </div>
+      </div>
+  
+    </div>
+    <div class="card">
+  
+        <!-- Card header -->
+        <div class="card-header" role="tab" id="headingTwo2">
+          <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo3"
+            aria-expanded="false" aria-controls="collapseTwo3">
+            <h5 class="mb-0">
+             Service Details <i class="fa fa-angle-down" style="float:right;" aria-hidden="true"></i>
+    
+            </h5>
+          </a>
+        </div>
+    
+        <!-- Card body -->
+        <div id="collapseTwo3" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
+          data-parent="#accordionEx">
+          <div class="card-body" style="padding: 0">
+              <button ion-button (click)="addItem()" class="addBtn"><i class="fa fa-plus" aria-hidden="true"></i></button><br><br>
+              <ion-list style="background-color: #f7f7f7f7;" formArrayName="services" *ngFor="let a of labsignup.get('services').controls; let i = index">
+                  <!-- <ion-label color="primary">{{att.label}}{{idx+1}}</ion-label> -->
+                  <ion-card>
+                      <button class="cancelBtn" ion-button (click)="removeItem(i)">X</button>
+          
+                      <div [formGroupName]="i"  style="margin-bottom: 10px;">
+                  <ion-label> <b>Services</b></ion-label>
+              <ion-select formControlName="service" placeholder="Select One">
+                <ion-select-option *ngFor="let data of serviceList" value="{{data.name}}" >{{data.name}}</ion-select-option>
+              </ion-select>
+              <ion-label><b>Price</b></ion-label>
+                  <ion-input type='tel' pattern="^[0-9]{2,45}$" placeholder="Enter Price" formControlName="price"></ion-input>
+                  </div>
+                </ion-card>
+              </ion-list>
+          </div>
+        </div>
+    
+      </div>
+  </div>
+  <div padding>
+      <ion-button type="submit" size="medium" expand="block" [disabled]="!labsignup.valid">Submit</ion-button>
+      <ion-button type="reset" size="medium" expand="block" (click)="reset()">reset</ion-button>
+  
+    </div>
+  </form>
+  <!-- Accordion wrapper -->
+  </ion-content>
+  

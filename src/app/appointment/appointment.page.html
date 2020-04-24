@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    <ion-title>
+        Appointment
+        <button class="addBtn" routerLink="/home">Book</button>
+    </ion-title>
+   
+  </ion-toolbar>
+ </ion-header>
+   <ion-content>
+     <ion-card *ngFor="let data of tableData">
+        <ion-row>
+            <ion-col size="12">
+                <b class="labName"><i class="fa fa-flask" aria-hidden="true"></i>
+                  {{data.labName}}</b>
+            </ion-col>              
+             </ion-row>
+             <ion-row>
+               <ion-col  size="12">
+                  {{data.services}} - &nbsp;<i class="fa fa-rupee" aria-hidden="true"></i> {{data.serviceRate}}
+               </ion-col>
+               </ion-row>          
+             <ion-row>
+                <ion-col size="12">
+                   {{data.name}} - <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;
+                   {{data.mobileNumber}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="5">
+                    <i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp;{{data.modeOfPayment}}
+                </ion-col>
+                <ion-col size="7">
+                  <b>Payment Status:</b>&nbsp;{{data.pStatus}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                  <ion-col size="12"> <b>Booking Status</b>&nbsp; {{data.status}}
+
+                   </ion-col>
+              </ion-row>
+     </ion-card>
+     <!-- <ion-card> -->
+        <div [hidden]="showMsg" class="nolistMsg">No records to display.<br>Please click on 'Book' to book an appointment</div>
+     <!-- </ion-card> -->
+     <!-- <ion-grid>
+       
+       <ion-row class="headercol">
+          <ion-col size="3"> Patient Name</ion-col>
+          <ion-col size="3">Lab Name</ion-col>
+          <ion-col size="3">Appointment Date</ion-col>
+          <ion-col size="3">View</ion-col>
+        </ion-row>
+      
+       <ion-row *ngFor="let data of tableData"*ngFor="let data of tableData">
+          <ion-col size="3"> {{data.name}}</ion-col>
+          <ion-col size="3">{{data.labName}} </ion-col>
+          <ion-col size="3">{{data.appointDate | date :'dd-MM-yyyy h:mm a'}}</ion-col> 
+          <ion-col size="3">
+              <ion-button size="small" color="light"><ion-icon name="search"></ion-icon></ion-button>
+          </ion-col>
+       </ion-row>    
+    </ion-grid> -->
+</ion-content>
+
+

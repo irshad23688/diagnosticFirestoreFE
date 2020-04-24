@@ -1,0 +1,122 @@
+.color-boxes {
+    display: none;
+}
+
+.show {
+    display: inline !important;
+}
+
+ion-item {
+    font: normal;
+    font-size: 15px;
+}
+
+ion-label {
+    color: #555555 !important;
+}
+
+.ionContent {
+    // --ion-background-color: #f4f4f6;
+}
+
+.item {
+    --border-color: var(--ion-color, black);
+}
+
+.swal2-styled.swal2-confirm {
+    font-size: 12px !important;
+}
+
+.swal2-title {
+    font-size: 14px !important;
+}
+
+textarea {
+    margin: 10px 0px 10px 0;
+}
+
+.address {
+    margin-top: 10px;
+    // margin-left: 14px;
+
+}
+
+.ionCard {
+    width: 96%;
+    background-color: white;
+}
+
+.masters {
+    --ion-background-color: #f4f4f6;
+}
+
+ion-card {
+    background-color: white;
+}
+
+.submitBtn {
+    background-color: #2dd36f !important;
+    border-radius: 8px;
+    padding: 10px 30px;
+    width: 80%;
+    color: white;
+}
+
+.cancelBtn {
+    float: right;
+    color: white;
+    background-color: #f902029c;
+    width: 30px;
+    height: 30px;
+}
+
+.addBtn {
+    float: right;
+    background-color: #ff6c0096;
+    font-size: 18px;
+    border-radius: 6px;
+    color: white;
+    height: 30px;
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 30px;
+}
+
+.backBtn {
+    float: right;
+    background-color: rgba(54, 54, 235, 0.671);
+    font-size: 18px;
+    border-radius: 8px;
+    // width:25%;
+    color: white;
+    height: 30px;
+}
+
+ion-label {
+    // margin-left: 5px;
+    margin-top: 5px;
+
+}
+.area{
+    margin-left: 15px;
+}
+
+.card-body {
+    background-color: #f7f7f7 !important;
+}
+.card-header{
+    background-color: white;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+div.item-native{
+    padding: 0 !important;
+}
+h5, .h5 {
+    font-size: 1.0rem !important;
+}

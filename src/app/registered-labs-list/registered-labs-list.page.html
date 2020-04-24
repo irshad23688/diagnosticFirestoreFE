@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Pending New Labs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card *ngFor="let data of cardData" (click)='cardClick(data.key)'>
+        <ion-row>
+            <ion-col size="12">
+                <b class="labName"><i class="fa fa-flask" aria-hidden="true"></i>
+                  {{data.labname}}</b>
+            </ion-col>              
+             </ion-row>         
+             <ion-row>
+                <ion-col size="12">
+                   {{data.personName}} - <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;
+                   {{data.mobileNumber}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                  <ion-col size="12">
+                      <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;{{data.email}}
+                  </ion-col>
+                </ion-row>
+             <ion-row>
+                <ion-col  size="12">
+                    <i class="fa fa-address-card" aria-hidden="true"></i>&nbsp;
+                    {{data.address}}
+                </ion-col>
+                </ion-row> 
+                <ion-row>
+                    <ion-col  size="12">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;{{data.city}} - {{data.state}} 
+                    </ion-col>
+                    </ion-row> 
+              <ion-row>
+                <ion-col size="12">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;{{formatDate(data.createdDate)}}
+                </ion-col>
+                
+              </ion-row>
+              <!-- <ion-row> -->
+                <div>
+                  <div *ngIf="data.status=='Completed' || data.status=='Cancelled'">
+                      <b>Status: <span [ngClass]="{'comColor': data.status=='Completed','canColor': data.status=='Cancelled'}">{{data.status}}</span></b>
+                  </div>
+                    <div *ngIf="data.status=='Pending'"><b>Status:</b></div> 
+                      <div *ngIf="data.status=='Pending'" class="dropDown">
+                          <ion-select (ionChange)='selectedList($event)' placeholder={{dropDownList(data.status)}} interface="popover">
+                              <ion-select-option  *ngFor="let statusdata of statusArray" value="{{statusdata}}" >{{statusdata}}</ion-select-option>
+                            </ion-select>
+                      </div>
+                </div>                    
+              <!-- </ion-row> -->
+                   </ion-card>
+</ion-content>

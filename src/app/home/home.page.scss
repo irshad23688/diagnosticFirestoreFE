@@ -1,0 +1,33 @@
+ion-row{
+  margin-left: 5px;
+  }
+  .labName{
+    font-size: 18px;
+  }
+  .fa{
+    margin-top: 3px !important;
+  
+  }
+  ion-content{
+    --ion-background-color:#f4f4f6;
+  }
+  .addBtn{
+    float: right;
+    background-color: #008000b0;
+    font-size: 15px;
+    border-radius: 8px;
+    // width:25%;
+    color: white;
+    height: 30px;
+    margin-bottom: 5px;
+
+  }
+  ion-card{
+    background-color: white;
+    width: 100%;
+    margin: 1px 0 0 0;
+  }
+  .centerAlign{
+  justify-content: center;
+
+  }

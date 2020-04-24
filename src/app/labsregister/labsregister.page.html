@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Lab Registation</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card>
+  <ion-grid>
+
+      <form [formGroup]="labsignup" (ngSubmit)="onSubmit()">
+    <ion-item class="item">
+    <ion-label position="floating">Lab Name</ion-label>
+    <ion-input  formControlName='labname'></ion-input>
+    </ion-item>
+    <ion-item class="item">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName='email'></ion-input>
+        </ion-item>
+    <ion-item class="item">
+        <ion-label position="floating">Address</ion-label>
+        <textarea formControlName='address'></textarea>
+    </ion-item>
+    <ion-item class="item">
+        <ion-label position="floating">City</ion-label>
+        <ion-input  formControlName='city'></ion-input>
+    </ion-item>
+    <ion-item class="item">
+        <ion-label position="floating">State</ion-label>
+        <ion-input  formControlName='state'></ion-input>
+   </ion-item>
+   <ion-item class="item">
+      <ion-label position="floating">Pin Code</ion-label>
+      <ion-input type="tel"pattern="^[0-9]{6,6}$"  maxLength="6"  formControlName='pincode'></ion-input>
+    </ion-item>
+    <ion-item class="item">
+        <ion-label position="floating">Contact Person Name</ion-label>
+        <ion-input type="text" formControlName='personName'></ion-input>
+    </ion-item>
+    <ion-item class="item">
+          <ion-label position="floating">Mobile Number</ion-label>
+          <ion-input type='tel' pattern="^[0-9]{10,10}$" maxlength="10" formControlName='mobileNumber'></ion-input>
+    </ion-item>
+    <div>
+        <ion-button type="submit"  expand="block" [disabled]="!labsignup.valid">Submit</ion-button>
+         <ion-button type ="button" expand="block" (click)='onCancel()' color="light">Back</ion-button>
+      </div>
+  </form> 
+  </ion-grid>
+</ion-card>
+</ion-content>

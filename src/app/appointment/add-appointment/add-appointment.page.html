@@ -1,0 +1,188 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    <ion-title>Add Appointment</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="addAppointmentForm" (ngSubmit)="onSubmit()">
+
+    <!--Accordion wrapper-->
+    <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+    
+      <!-- Accordion card -->
+      <div class="card">
+    
+        <!-- Card header -->
+        <div class="card-header" role="tab" id="headingOne1">
+          <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="true"
+            aria-controls="collapseOne1">
+            <h5 class="mb-0">
+              Lab Details<i style="float: right;" class="fa fa-angle-down" aria-hidden="true"></i>
+            </h5>
+          </a>
+        </div>
+    
+        <!-- Card body -->
+        <div id="collapseOne1" class="collapse show" role="tabpanel" aria-labelledby="headingOne1"
+          data-parent="#accordionEx">
+          <div class="card-body">
+            <ion-card *ngFor="let list of labAppointmentList" >
+              <ion-row>
+                <ion-col size="12">
+                    <b class="labName"><i style="float: right;" class="fa fa-flask" aria-hidden="true"></i>
+                      {{list.labname}}</b>
+                </ion-col>              
+                 </ion-row>
+                 <ion-row>
+                   <ion-col  size="12">
+                      <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;
+                      {{list.area}}, {{list.city}} - {{list.pincode}}
+                   </ion-col>
+                   </ion-row>          
+                 <ion-row>
+                    <ion-col size="12">
+                       {{list.personname}} - <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;
+                       {{list.mobilenumber}}
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="12">
+                       <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;{{list.email}}
+                    </ion-col>
+                    
+                  </ion-row>
+                  </ion-card>
+          </div>
+        </div>
+    
+      </div>
+      <!-- Accordion card -->
+      
+
+      <!-- Accordion card -->
+      <div class="card">
+    
+        <!-- Card header -->
+        <div class="card-header" role="tab" id="headingTwo2">
+          <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
+            aria-expanded="false" aria-controls="collapseTwo2">
+            <h5 class="mb-0">
+             Appointment Details <i class="fa fa-angle-down" style="float:right;" aria-hidden="true"></i>
+            </h5>
+          </a>
+        </div>
+    
+        <!-- Card body -->
+        <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
+          data-parent="#accordionEx">
+          <div class="card-body">
+              <ion-card>
+                
+              <!-- <ion-item> -->
+                <ion-label position="stacked" class="appointlabel">Enter Patient Name *</ion-label>
+                <ion-item>
+                <ion-input  formControlName='name' placeholder="Enter Name"></ion-input>
+              </ion-item><br>
+            
+              <!-- <ion-item> -->
+                <ion-label position="stacked" class="appointlabel">Contact Number *</ion-label>
+                <ion-item>
+                <ion-input formControlName='mobileNumber' type='tel' pattern="^[0-9]{3,45}$" maxlength="10" placeholder="Enter Number"></ion-input>
+               </ion-item> 
+              <br>
+            
+              <ion-label class="stacked" class="appointlabel"> Gender *</ion-label>
+              <ion-select  placeholder="Select Gender" formControlName='gender' interface="popover">
+                <ion-select-option value="Male">Male</ion-select-option>
+                <ion-select-option value="Female">Female</ion-select-option>
+                <ion-select-option value="Other">Other</ion-select-option>
+              </ion-select>
+        <br>
+                <!-- <ion-item> -->
+            <!-- <ion-label class="appointlabel" stacked>Labs</ion-label>
+            <ion-select name="lab" placeholder="Select Lab" formControlName='labs' interface="popover">
+              <ion-select-option  *ngFor="let lab of labList">{{lab}}</ion-select-option>
+                </ion-select>  -->
+            <!-- </ion-item> -->
+        
+              <!-- <ion-item> -->
+                <ion-label class="appointlabel">Select Appointment Date </ion-label><br>
+                <!-- D MMM YYYY H:mm -->
+                <div style="width: 76%;margin-left: 27px;">
+                  <ejs-datepicker  formControlName='appointDate' placeholder="Select Date"  format='yyyy-MM-dd'  [min]="minDate"></ejs-datepicker>
+
+                </div>
+                <!-- <ion-datetime interface="popover" formControlName='appointDate' displayFormat="D MMM YYYY " min="1997" max="2020"
+                  value=date ></ion-datetime> -->
+              <!-- </ion-item> -->
+        
+              <!-- <ion-item> -->
+                <br> <br> 
+            </ion-card>
+          </div>
+        </div>
+      </div>
+      <div class="card-header" role="tab" id="headingTwo2">
+          <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo3"
+            aria-expanded="false" aria-controls="collapseTwo3">
+            <h5 class="mb-0">
+             Service Details <i class="fa fa-angle-down" style="float:right;" aria-hidden="true"></i>
+            </h5>
+          </a>
+        </div>
+    
+        <!-- Card body -->
+        <div id="collapseTwo3" class="collapse" role="tabpanel" aria-labelledby="headingTwo3"
+          data-parent="#accordionEx">
+          <div class="card-body">
+            <ion-card>
+              <ion-label position="stacked" class="appointlabel"> Services *</ion-label>
+              <!-- <ion-label stacked class="appointlabel"> Services</ion-label> -->
+              <ion-select name="service" placeholder="Select Service" (ionChange)="displayPrice($event)" formControlName='services' interface="popover">
+                <ion-select-option *ngFor="let ser of labAppointServList">{{ser.service}}</ion-select-option>
+              </ion-select>
+            <ion-item *ngIf="servicePrice">
+                <ion-label position="stacked" class="appointlabel"> Price</ion-label>
+              <ion-input readonly ><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{servicePrice}}</ion-input>
+            </ion-item>
+            <ion-label class="appointlabel">Select Coupon *</ion-label>
+            <ion-select placeholder="Select Coupon" (ionChange)='couponChange($event)' formControlName='coupon' interface="popover">
+              <ion-select-option *ngFor="let coupon of couponDetails"  value="{{coupon.value}}">{{coupon.name}}</ion-select-option>
+            </ion-select>
+            <div *ngIf="(discount && servicePrice)" style="margin: 0px 10px;">
+          <div>
+            <span><b>Service Rate</b></span>
+            <span style="float:right;">{{servicePrice}}</span>
+          </div>
+          <div>
+            <span><b>Discount</b></span>
+            <span style="float:right;">{{discount}}</span> 
+          </div>
+          <div>
+            <span><b>Total Amount</b></span>
+            <span style="float:right;"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{totalPrice}}</span>
+          </div>
+        </div><br>
+          <ion-label class="appointlabel">Payment *</ion-label>
+                <ion-select placeholder="Select Payment" formControlName='modeOfPayment' interface="popover">
+                  <ion-select-option value="Cash">Cash</ion-select-option>
+                  <ion-select-option value="UPI"> UPI</ion-select-option>
+                  <ion-select-option value="Card"> Card</ion-select-option>
+                </ion-select>
+              <!-- </ion-item> -->
+              <div padding>
+                <ion-button type="submit" size="medium" expand="block" [disabled]="!addAppointmentForm.valid">Proceed To Payment</ion-button>
+                <ion-button type="reset" size="medium" expand="block" (click)="reset()">reset</ion-button>
+
+              </div>
+            </ion-card>
+          </div>
+        </div>
+    </div>
+  </form>
+    <!-- Accordion wrapper -->
+</ion-content>

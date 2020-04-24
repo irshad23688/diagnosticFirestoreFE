@@ -1,0 +1,22 @@
+ion-item{
+    font: normal;
+    font-size: 15px;
+}
+
+ion-label{
+    color: #555555!important;
+}
+
+.item{
+   --border-color:var(--ion-color, black);
+}
+
+.swal2-styled.swal2-confirm {
+    font-size: 12px !important;
+    }
+.swal2-title {
+    font-size: 14px !important;
+}
+textarea {
+    margin: 20px 0px 10px 50px;
+}
