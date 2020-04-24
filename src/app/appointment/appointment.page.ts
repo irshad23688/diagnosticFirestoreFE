@@ -26,7 +26,6 @@ export class AppointmentPage implements OnInit {
   
   
 async present() {
-  this.tableData=[];
   // this.appointmentList=[];
   return await this.loadingCtrl.create({
   }).then(a => {
@@ -41,22 +40,22 @@ async present() {
         console.log('No such document!');
       } else {
         this.afd.collection("bookings",ref=>ref.where("createdId","==",this.af.auth.currentUser.uid)).valueChanges().subscribe(res=>{
-         console.log(res);
           let temp;
+          this.tableData=[];
+
           res.forEach(item=>{
-            console.log(item);
-  
                 temp = item;
-                // this.discountedPrice= temp.value;
-                // console.log('temp', temp)
-                // temp["$key"] = item.payload.key;
                  this.tableData.push(temp);
-                 this.showMsg=true;
+                // this.showMsg=true;
           });
+          if(this.tableData.length===0){
+            this.showMsg=true;
+          }else{
+            this.showMsg=false;
+          }
             a.dismiss().then(() => console.log('abort presenting'));
 
         });
-        console.log('Document data:', doc.data());
       }
     });
   

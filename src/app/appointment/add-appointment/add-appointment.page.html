@@ -149,8 +149,8 @@
                 <ion-label position="stacked" class="appointlabel"> Price</ion-label>
               <ion-input readonly ><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{servicePrice}}</ion-input>
             </ion-item>
-            <ion-label class="appointlabel">Select Coupon *</ion-label>
-            <ion-select placeholder="Select Coupon" (ionChange)='couponChange($event)' formControlName='coupon' interface="popover">
+            <ion-label *ngIf="servicePrice" class="appointlabel">Select Coupon</ion-label>
+            <ion-select *ngIf="servicePrice" placeholder="Select Coupon" (ionChange)='couponChange($event)' formControlName='coupon' interface="popover">
               <ion-select-option *ngFor="let coupon of couponDetails"  value="{{coupon.value}}">{{coupon.name}}</ion-select-option>
             </ion-select>
             <div *ngIf="(discount && servicePrice)" style="margin: 0px 10px;">
@@ -175,7 +175,7 @@
                 </ion-select>
               <!-- </ion-item> -->
               <div padding>
-                <ion-button type="submit" size="medium" expand="block" [disabled]="!addAppointmentForm.valid">Proceed To Payment</ion-button>
+                <ion-button class="submitBtnn" type="submit" size="medium" expand="block" [disabled]="!addAppointmentForm.valid">Proceed To Payment</ion-button>
                 <ion-button type="reset" size="medium" expand="block" (click)="reset()">reset</ion-button>
 
               </div>

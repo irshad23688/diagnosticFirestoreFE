@@ -1,19 +1,20 @@
-import {Component, OnInit }from '@angular/core'; 
-import {FormGroup, FormBuilder, Validators }from '@angular/forms'; 
-import {AngularFireDatabase, AngularFireList, AngularFireObject }from '@angular/fire/database'; 
-import {IntercomponentService }from 'src/app/services/intercomponent.service'; 
-import {Router }from '@angular/router'; 
-import {WebIntent }from '@ionic-native/web-intent/ngx'; 
-import {AngularFireAuth }from '@angular/fire/auth'; 
-import {Observable }from 'rxjs'; 
-import { GetService } from 'src/app/get.service';
-import { Platform } from '@ionic/angular';
-import { Configuration } from 'src/assets/config';
+import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireList, AngularFireObject } from '@angular/fire/database';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { WebIntent } from '@ionic-native/web-intent/ngx';
+import { Platform } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { GetService } from 'src/app/get.service';
+import { IntercomponentService } from 'src/app/services/intercomponent.service';
 import { CrudRepositoryService } from 'src/app/_service/crud-repository.service';
-import { map, merge } from 'rxjs/operators';
+import { Configuration } from 'src/assets/config';
 declare var RazorpayCheckout:any; 
-declare var swal:any; 
+declare var swal:any;
+declare var $:any; 
+
 @Component( {
   selector:'app-add-appointment', 
   templateUrl:'./add-appointment.page.html', 
@@ -76,7 +77,7 @@ export class AddAppointmentPage implements OnInit {
       services:['', Validators.required], 
       appointDate:['', Validators.required], 
       modeOfPayment:['', Validators.required], 
-      coupon:['']
+      coupon:['% Off']
     });
     if (this.af.auth.currentUser) {
       this.userId = this.af.auth.currentUser.uid;
@@ -126,11 +127,18 @@ export class AddAppointmentPage implements OnInit {
 }
 
 onSubmit() {
+  $('.submitBtnn').attr('disabled','true');
+  let discRate;
+  if(isNaN((this.servicePrice - (this.servicePrice * this.discountedPrice)))){
+        discRate='';
+  } else{
+    discRate=(this.servicePrice - (this.servicePrice * this.discountedPrice));
+  }
       let keyDetails =  {
         labKey:this.appointmentId, 
         labName:this.labName, 
         serviceRate:this.servicePrice,
-        discountedRate: (this.servicePrice - (this.servicePrice * this.discountedPrice)),
+        discountedRate: discRate,
         bookingId:this.bookingId, 
         status:'Booked', 
         pStatus:'Pending', 
@@ -225,10 +233,11 @@ upiPaymentJson() {
   return cardJson; 
   }
 
-onSuccessTxn(status, extras) {
+onSuccessTxn(status, extras,amount) {
   let payStatus={
     extras: extras,
-    status:status
+    status:status,
+    payableAmount:amount
   }
     let paymentSucess = Object.assign(payStatus, this.upiPaymentJson(),this.updateDateAndUser());
     this.crudRepo.create(paymentSucess,"paymentDetails").then(res =>  {
@@ -246,14 +255,14 @@ paymentMethod() {
         amountPayable=this.totalPrice;
     }
     if (this.addAppointmentForm.value.modeOfPayment === 'Cash') {
-      let cashPayment = Object.assign(this.cashPaymentJson(),this.updateDateAndUser());
+      let cashPayment = Object.assign(this.cashPaymentJson(),this.updateDateAndUser(),{payableAmount:amountPayable});
       this.crudRepo.create(cashPayment,"paymentDetails").then(res =>  {
           swal.fire('You booking is confirmed. Please pay the amount at diagnostic center')
           // console.log('Res',res.key);
           this.afd.collection('bookings',ref=>ref.where("bookingId", "==",this.bookingId
           )).get().subscribe(res=>{
             res.docs.forEach(item=>{
-              this.updateCashDb(item.id);
+              this.updateCashDb(item.id,amountPayable);
             });
           
           });
@@ -272,13 +281,14 @@ paymentMethod() {
       }
       this.webIntent.startActivityForResult(options).then(onSuccess=>{
         this.paymentRefSuccess=onSuccess;
-        this.onSuccessTxn(this.paymentRefSuccess.extras.Status,this.paymentRefSuccess.extras);
-        this.upiPay();
+        this.onSuccessTxn(this.paymentRefSuccess.extras.Status,this.paymentRefSuccess.extras,amountPayable);
+        this.upiPay(amountPayable);
       },onError=>{
         this.paymentRefFailure=onError;
-        this.onSuccessTxn(this.paymentRefFailure.extras.Status,this.paymentRefSuccess.extras);
+        this.onSuccessTxn(this.paymentRefFailure.extras.Status,this.paymentRefSuccess.extras,amountPayable);
         let failureMsg={
-          extras: this.paymentRefFailure
+          extras: this.paymentRefFailure,
+          payableAmount:amountPayable
         }
         let paymentFailure= Object.assign(failureMsg,this.upiPaymentJson(), this.updateDateAndUser())
         this.crudRepo.create(paymentFailure,"paymentDetails").then(res=>{
@@ -292,45 +302,69 @@ paymentMethod() {
     
   } 
 
-  upiPay(){
+  upiPay(amountPayable){
     this.afd.collection('bookings',ref=>ref.where("bookingId", "==",this.bookingId
           )).get().subscribe(res=>{
             res.docs.forEach(item=>{
               if(this.paymentRefSuccess.extras.Status==='SUCCESS'){
-                this.updateUpiDb(this.paymentRefSuccess.extras.Status,this.paymentRefSuccess.extras,item.id);
+                this.updateUpiDb(this.paymentRefSuccess.extras.Status,this.paymentRefSuccess.extras,item.id,amountPayable);
                 this.route.navigate(['/payment-success']);
               } else{
-                this.updateUpiDb(this.paymentRefSuccess.extras.Status,this.paymentRefSuccess.extras,item.id);
+                this.updateUpiDb(this.paymentRefSuccess.extras.Status,this.paymentRefSuccess.extras,item.id,amountPayable);
                 this.route.navigate(['/payment-failure']);
               }
             })
             
           });
   }
- updateDb(reponseStatus,key){
+ updateDb(reponseStatus,key,amount){
+   let coupons;
+   if(this.discount===undefined){
+    coupons='';
+   } else{
+    coupons=this.discount + "% Off";
+   }
     this.afd.collection("bookings").doc(key).set({
       pStatus:reponseStatus, 
       extras:{
         txnId: this.payId
-    }
+    },
+    payableAmount:amount,
+    coupon: coupons 
     },{merge:true});
  }
 
- updateUpiDb(status,extras,key){
+ updateUpiDb(status,extras,key,am){
+  let coupons;
+  if(this.discount===undefined){
+   coupons='';
+  } else{
+   coupons=this.discount + "% Off";
+  }
   this.afd.collection("bookings").doc(key).set({
     pStatus:status, 
-    extras:extras
+    extras:extras,
+    payableAmount:am,
+    coupon: coupons 
   },{merge:true});
  }
- updateCashDb(key){
-  this.afd.collection("bookings").doc(key).update({
+ updateCashDb(key,amountPayable){
+  let coupons;
+  if(this.discount===undefined){
+   coupons='';
+  } else{
+   coupons=this.discount + "% Off";
+  }
+  this.afd.collection("bookings").doc(key).set({
     extras:{
       txnId:'', 
       txnRef:'',
       responseCode:'', 
       ApprovalRefNo:'', 
-    }
-  });
+    },
+    payableAmount:amountPayable,
+    coupon: coupons
+  },{merge:true});
       
  }
 //  checkcndition(orderid):Promise<any>{
@@ -386,7 +420,7 @@ payWithRazor(am) {
     }
   };
   var successCallback = (payment_id) => { // <- Here!
-    this.successCallback(payment_id);
+    this.successCallback(payment_id,am);
   };
   
   var cancelCallback = (error) => { // <- Here!
@@ -397,20 +431,21 @@ payWithRazor(am) {
     RazorpayCheckout.open(options, successCallback, cancelCallback);
   })
 }
-successCallback(payment_id) {
+successCallback(payment_id,am) {
   this.payId=payment_id; 
   if(payment_id){
     this.afd.collection('bookings',ref=>ref.where("bookingId", "==",this.bookingId)).get().subscribe(res=>{
       res.docs.forEach(item=>{
-        this.updateDb('SUCCESS',item.id);
+        this.updateDb('SUCCESS',item.id,am);
       });
      });
     this.cardPayment('SUCCESS');
     this.route.navigate(['/payment-success']);
   }else{
     this.afd.collection('bookings',ref=>ref.where("bookingId", "==",this.bookingId)).get().subscribe(res=>{
+      
       res.docs.forEach(item=>{
-        this.updateDb('FAILURE',item.id);
+        this.updateDb('FAILURE',item.id,am);
       });
 });
     this.cardPayment('FAILURE');
@@ -445,10 +480,12 @@ updateDateAndUser(){
 }
 
 couponChange(event){
+  console.log(event.target.value)
  this.discount=event.target.value;
  this.discountedPrice= event.target.value;
  this.discountedPrice= this.discountedPrice/100;
  this.totalPrice= this.servicePrice - (this.servicePrice*this.discountedPrice);
+ console.log(this.totalPrice)
 
 }
 }
