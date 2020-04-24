@@ -129,10 +129,13 @@ export class AddAppointmentPage implements OnInit {
 onSubmit() {
   $('.submitBtnn').attr('disabled','true');
   let discRate;
+  let payAmnt;
   if(isNaN((this.servicePrice - (this.servicePrice * this.discountedPrice)))){
         discRate='';
+        payAmnt=this.servicePrice;
   } else{
     discRate=(this.servicePrice - (this.servicePrice * this.discountedPrice));
+    payAmnt=discRate;
   }
       let keyDetails =  {
         labKey:this.appointmentId, 
@@ -143,6 +146,7 @@ onSubmit() {
         status:'Booked', 
         pStatus:'Pending', 
         adminStatus:true,
+        payableAmount:payAmnt,
         appointDate:this.formatDate(this.addAppointmentForm.value.appointDate)
       }
       let newAppointDetails = Object.assign(this.addAppointmentForm.value, keyDetails,this.updateDateAndUser())
